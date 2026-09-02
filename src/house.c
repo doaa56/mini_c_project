@@ -168,8 +168,29 @@ uint16_t tempC(uint16_t adc)
  */
 uint8_t applyRules(Room_t *r)
 {
-    (void)r;        /* delete this line */
-    return 0U;      /* TODO */
+    if (!READ_BIT(r->status, BIT_AUTO)) {
+        return 0U;      /* leave it alone */
+    }
+    uint8_t oldStatus = r->status;   /* save it for comparison at the end */
+    if (READ_BIT(r->status, BIT_OCCUPIED)) {
+        SET_BIT(r->status, BIT_LAMP);
+    } else {
+        CLR_BIT(r->status, BIT_LAMP);
+    }
+    if (tempC(r->adc) >= TEMP_HOT) {
+        SET_BIT(r->status, BIT_FAN);
+    } else {
+        CLR_BIT(r->status, BIT_FAN);
+    }
+    if (tempC(r->adc) >= TEMP_ALARM) {
+        SET_BIT(r->status, BIT_ALARM);
+        SET_BIT(r->status, BIT_LAMP);
+    } else {
+        CLR_BIT(r->status, BIT_ALARM);
+    }
+    return (r->status != oldStatus) ? 1U : 0U;
+
+
 }
 
 
@@ -194,7 +215,11 @@ uint8_t applyRules(Room_t *r)
  */
 uint8_t rulesPass(void)
 {
-    return 0U;      /* TODO */
+    uint8_t changedCount = 0;
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        changedCount += applyRules(&house[i]);
+    }
+    return changedCount;
 }
 
 
@@ -212,8 +237,13 @@ uint8_t rulesPass(void)
  */
 uint8_t countRoomsWith(uint8_t bit)
 {
-    (void)bit;      /* delete this line */
-    return 0U;      /* TODO */
+    uint8_t count = 0;
+    for (int i = 0; i < ROOM_COUNT; i++) {
+        if (READ_BIT(house[i].status, bit)) {
+            count++;
+        }
+    }
+    return count;
 }
 
 
@@ -242,6 +272,8 @@ uint8_t countRoomsWith(uint8_t bit)
  */
 uint32_t sumAdc(const Room_t *rooms, uint8_t n)
 {
-    (void)rooms; (void)n;   /* delete this line */
-    return 0UL;             /* TODO */
+    if (n == 0) {
+        return 0UL;
+    }
+    return rooms[n - 1].adc + sumAdc(rooms, n - 1);
 }
