@@ -5,6 +5,7 @@ REM  Author: Ahmed Ellamie <ahmed.ellamiee@gmail.com>
 REM ===========================================================
 setlocal
 
+set "PATH=C:\msys64\ucrt64\bin;%PATH%"
 set SRC=main.c src\house.c src\render.c src\ui.c src\platform.c src\demo.c
 
 gcc -std=c99 -Wall -Wextra -Iinclude -o house.exe %SRC%
