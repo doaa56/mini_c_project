@@ -361,7 +361,7 @@ void houseReport(void)
  */
 void runAutomation(void)
 {
-    render(-1);
+    
     char trace[ROOM_COUNT][96];
     uint8_t changed = 0;
     for (uint8_t i = 0; i < ROOM_COUNT; i++) {
@@ -382,6 +382,7 @@ void runAutomation(void)
             }
         }
     }
+    render(-1);
     for (uint8_t i = 0; i < ROOM_COUNT; i++) {
         printf("%s\n", trace[i]);
     }
