@@ -446,3 +446,13 @@ This happens because the rules execute sequentially from top to bottom, meaning 
 
 *A house is an array. A room is a struct. A light switch is one bit.
 The drawing is done — now make it think.*
+## Screenshots
+
+**1. Startup (All Auto, Everything Off)**
+![Startup](screenshot1_startup.png)
+
+**2. Overheat (Menu 5 - Run Automation)**
+![Overheat](screenshot2_overheat.png)
+
+**3. House Report (Menu 6)**
+![Report](screenshot3_report.png)
